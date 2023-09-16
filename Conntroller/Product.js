@@ -1,32 +1,71 @@
 const Post = require("../Model/ProductSchema")
 const { upload } = require("../MiddelWare/Multer");
+const Category = require("../Model/CategorySchema");
+const Brand = require("../Model/BrandSchema");
+
+// Generate a random number between min and max (inclusive)
+function getRandomNumber(min, max) {
+  const randomDecimal = Math.random();
+  const randomNumber = Math.floor(randomDecimal * (max - min + 1)) + min;
+  return randomNumber;
+}
+
 
 // Subadmin add post route
 const AddProduct = async (req, res) => {
   try {
-     const imageFileNames = req.files.map((file) => file.filename);
-     console.log(imageFileNames ,"imageFileNames")
+    const imageFileNames = req.files.map((file) => file.filename);
+    const { name, category, brand, price, discountedPrice, menuProductNumber,ProductLink, totalUnits, longDescription, shortDescription } = req.body;
+    
+    const singleProductUnit = getRandomNumber(1, 12);
+    
+    const categoryIds = category.map((product) => product);
+    console.log(categoryIds,"categoryIds")
+    const foundcategorys = await Category.find({ _id:  categoryIds  });
+    console.log(foundcategorys,"foundcategorys")
+    // Use the $in operator to find documents with these IDs
+  // const foundcategorys= Category.find({ _id: { $in: categoryIds } })
+  //     .then((foundCategories) => {
+  //       console.log(foundCategories, "foundCategories");
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+
+  const brandIds = brand.map((product) => product);
+  console.log(brandIds,"brandIds")
+  const foundbrands = await Brand.find({ _id:  brandIds  });
+  console.log(foundbrands,"foundbrands");
 
 
-    const { name,category,brand,price,discountedPrice,menuProductNumber,unitsolds,totalUnits,longDescription,shortDescription } = req.body;
-     const post = new Post({
+
+
+
+    const post = new Post({
       name,
-      category,
-      brand,
+      category:foundcategorys,
+      brand:foundbrands,
       price,
+      ProductLink,
       discountedPrice,
       menuProductNumber,
-      // images: req.files.map((file) => file.filename), // Array of image file names
+      images: req.files.map((file) => file.filename), // Array of image file names
       // video: req.file.filename, // Video file name
-      unitsolds,
+      unitsolds: singleProductUnit,
       totalUnits,
       longDescription,
       shortDescription,
     });
+  
 
-    await post.save();
+ 
+  await post.save(); 
 
-    console.log(title);
+  console.log(post, "post");
+
+    // await post.save();
+
+    // console.log(title);
     console.log(post, "post");
 
     res.status(201).json({ message: 'Post added successfully and pending admin approval' });
@@ -37,6 +76,24 @@ const AddProduct = async (req, res) => {
   }
 };
 
+
+const Findbylink = async (req, res) => {
+  try { 
+    const searchKey = req.params.Findbylink; // URL se search key hasil karen
+    console.log(searchKey,"searchKey")
+    
+    const result = await Post.findOne({ ProductLink: searchKey });
+    
+    if (!result) {
+      res.status(404).json({ message: 'ProductLink ke saath koi product nahi mila.' });
+      return;
+    }
+    
+    res.status(200).json({ result });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to approve post', error: error.message });
+  }
+}
 // Admin approve post route
 const ApprovePost = async (req, res) => {
   try {
@@ -118,7 +175,8 @@ module.exports = {
   ApprovePost,
   GetAllApprovedPost,
   GetAllApprovedPostAdmin,
-  GetAllProducts
+  GetAllProducts,
+  Findbylink
 }
 
 

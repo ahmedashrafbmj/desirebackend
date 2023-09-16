@@ -5,14 +5,19 @@ const postSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  category: {
-    type: String,
-    required: [true, "category is required"],
-  },
-  brand: {
-    type: String,
-    required: [true, "brand is required"],
-  },
+  category: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Category',
+    },
+  ],
+  brand: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Category',
+    },
+  ],
+ 
   price: {
     type: String,
     required: [true, "price is required"],
@@ -26,7 +31,7 @@ const postSchema = new mongoose.Schema({
   },
   unitsolds: {
     type: String,
-    required: [true, "unitsolds is Required"],
+    // required: [true, "unitsolds is Required"],
   },
   totalUnits: {
     type: String,
@@ -40,16 +45,20 @@ const postSchema = new mongoose.Schema({
     type: String,
     required: [true, "shortDescription is Required"],
   },
+  ProductLink: {
+    type: String,
+    required: [true, "shortDescription is Required"],
+  },
   images: [
     {
       type: String,
       required: [true, "images are Required"],
     },
   ],
-  video: {
-    type: String,
-    required: [true, "video is Required"],
-  },
+  // video: {
+  //   type: String,
+  //   required: [true, "video is Required"],
+  // },
 });
 
 const Post = mongoose.model('Post', postSchema);

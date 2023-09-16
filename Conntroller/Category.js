@@ -7,6 +7,7 @@ const AddCategory = async (req, res) => {
     const { name} = req.body;
      const post = new Category({
       name,
+      images:imageFileNames
     });
 
     await post.save();
