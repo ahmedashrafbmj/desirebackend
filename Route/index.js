@@ -21,18 +21,27 @@ const {upload,uploadvideo} = require("../MiddelWare/Multer")
 
 // stripe
 const {processPayment,confirmPayment} = require("../Conntroller/Strippe");
-const { AddCategory } = require('../Conntroller/Category');
-const { AddBrand } = require('../Conntroller/Brand');
+const { AddCategory ,GetCategories,Findbylinkcat} = require('../Conntroller/Category');
+const { AddBrand,GetBrand,Findbylinkbrand } = require('../Conntroller/Brand');
 // Signup route
 // router.post('/signup', upload.none(),signup);
 router.post('/signup', signup);
 router.post('/login', login);   
 router.post('/addProduct', upload, AddProduct);
-router.get('/product/:Findbylink', Findbylink);
 
 // router.put('/posts/:postId/approve',verifyAdminToken, ApprovePost);
 // router.post('/GetAllApprovedPostAdmin',verifyAdminToken, GetAllApprovedPostAdmin);
+
+
+router.get('/product/:Findbylink', Findbylink);
+router.get('/category/:Findbylink', Findbylinkcat);
+router.get('/brand/:Findbylink', Findbylinkbrand);
 router.get('/GetAllProducts', GetAllProducts);
+router.get('/getBrand', GetBrand);
+router.get('/getCategories',upload, GetCategories);
+
+
+
 router.post('/addCategory',upload, AddCategory);
 router.post('/addBrand',upload, AddBrand);
 // router.get('/GetAllApprovedPost', GetAllApprovedPost);

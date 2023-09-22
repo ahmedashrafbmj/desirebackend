@@ -14,15 +14,16 @@ function getRandomNumber(min, max) {
 // Subadmin add post route
 const AddProduct = async (req, res) => {
   try {
-    const imageFileNames = req.files.map((file) => file.filename);
+    // const imageFileNames = req.files.map((file) => file.filename);
     const { name, category, brand, price, discountedPrice, menuProductNumber,ProductLink, totalUnits, longDescription, shortDescription } = req.body;
     
     const singleProductUnit = getRandomNumber(1, 12);
+    console.log(req,"req.files")
     
     const categoryIds = category.map((product) => product);
-    console.log(categoryIds,"categoryIds")
+    // console.log(categoryIds,"categoryIds")
     const foundcategorys = await Category.find({ _id:  categoryIds  });
-    console.log(foundcategorys,"foundcategorys")
+    // console.log(foundcategorys,"foundcategorys")
     // Use the $in operator to find documents with these IDs
   // const foundcategorys= Category.find({ _id: { $in: categoryIds } })
   //     .then((foundCategories) => {
@@ -33,11 +34,12 @@ const AddProduct = async (req, res) => {
   //     });
 
   const brandIds = brand.map((product) => product);
-  console.log(brandIds,"brandIds")
+  // console.log(brandIds,"brandIds")
   const foundbrands = await Brand.find({ _id:  brandIds  });
-  console.log(foundbrands,"foundbrands");
+  // console.log(foundbrands,"foundbrands");
 
 
+  const imageFileNames = req.files.map((file) => file.filename);
 
 
 
@@ -49,7 +51,8 @@ const AddProduct = async (req, res) => {
       ProductLink,
       discountedPrice,
       menuProductNumber,
-      images: req.files.map((file) => file.filename), // Array of image file names
+      images:imageFileNames, // Array of image file names
+      // images: req.files.filename, // Array of image file names
       // video: req.file.filename, // Video file name
       unitsolds: singleProductUnit,
       totalUnits,
@@ -59,16 +62,16 @@ const AddProduct = async (req, res) => {
   
 
  
-  await post.save(); 
+  // await post.save(); 
 
   console.log(post, "post");
 
-    // await post.save();
+    await post.save();
 
     // console.log(title);
     console.log(post, "post");
 
-    res.status(201).json({ message: 'Post added successfully and pending admin approval' });
+    res.status(201).json({status:true, message: 'Post added successfully ' });
     // });
   } catch (error) {
     console.log(req.files, "req.user");

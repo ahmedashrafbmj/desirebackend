@@ -5,6 +5,10 @@ const categorySchema = new mongoose.Schema({
       type: String,
       required: [true, "name is Required"],
     },
+    link: {
+      type: String,
+      required: [true, "link is Required"],
+    },
 
   images: [
     {
