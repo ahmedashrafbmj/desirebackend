@@ -112,7 +112,7 @@ const FindbyId = async (req, res) => {
       return;
     }
     
-    const baseUrl = 'http://localhost:3000/uploads/'; // Replace with your actual base URL
+    const baseUrl = 'http://backend.terakarachi.com/uploads/'; // Replace with your actual base URL
     const imagesWithBaseUrl = result.images.map(image => baseUrl + image);
 
     // Update the result with the new image URLs
@@ -179,12 +179,18 @@ const GetAllProducts = async (req, res) => {
 
     const posts = await Post.find();
 
-    res.json({ posts });
-  }
-  catch (error) {
+    const baseUrl = 'http://backend.terakarachi.com/uploads/'; // Replace with your actual base URL
+    const postsWithBaseUrl = posts.map(data => {
+      data.images = data.images.map(image => baseUrl + image);
+      return data;
+    });
+
+    res.json({ posts: postsWithBaseUrl });
+  } catch (error) {
     res.status(500).json({ message: 'Failed to retrieve approved or reject posts', error: error.message });
   }
 }
+
 const GetAllApprovedPost = async (req, res) => {
   try {
 
