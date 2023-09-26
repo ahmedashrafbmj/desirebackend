@@ -97,6 +97,33 @@ const Findbylink = async (req, res) => {
     res.status(500).json({ message: 'Failed to approve post', error: error.message });
   }
 }
+const removeHyphen = (text) => {
+  return text.replace(/-/g, ' ');
+};
+const FindbyId = async (req, res) => {
+  try { 
+    const encodedName = req.params.name; // Get the encoded name parameter from the URL
+    const name =removeHyphen(req.params.name); // Decode the URL-encoded name
+    console.log(name, "name");
+    
+    const result = await Post.findOne({ name: name }); // Use findOne with the decoded name
+    if (!result) {
+      res.status(404).json({ message: 'Product not found' });
+      return;
+    }
+    
+    const baseUrl = 'http://localhost:3000/uploads/'; // Replace with your actual base URL
+    const imagesWithBaseUrl = result.images.map(image => baseUrl + image);
+
+    // Update the result with the new image URLs
+    result.images = imagesWithBaseUrl;
+
+    res.status(200).json({ data: result, message: "Product found", status: true });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to find product', error: error.message });
+  }
+}
+
 // Admin approve post route
 const ApprovePost = async (req, res) => {
   try {
@@ -179,7 +206,8 @@ module.exports = {
   GetAllApprovedPost,
   GetAllApprovedPostAdmin,
   GetAllProducts,
-  Findbylink
+  Findbylink,
+  FindbyId
 }
 
 

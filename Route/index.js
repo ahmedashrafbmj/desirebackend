@@ -7,7 +7,7 @@ const multer  = require("multer")
 //Controller Import 
 const { signup } = require('../Conntroller/Signup');
 const { login } = require('../Conntroller/Login');
-const { AddProduct,ApprovePost,GetAllApprovedPost,GetAllApprovedPostAdmin,GetAllProducts, Findbylink } = require('../Conntroller/Product');
+const { AddProduct,FindbyId,ApprovePost,GetAllApprovedPost,GetAllApprovedPostAdmin,GetAllProducts, Findbylink } = require('../Conntroller/Product');
 const {placeOrder,approveRejectOrder}  = require("../Conntroller/Orders")
 // const {ApprovePost} = require("../Conntroller/Product")
 // const {GetAllApprovedPost} = require("../Conntroller/Product")
@@ -39,6 +39,7 @@ router.get('/brand/:Findbylink', Findbylinkbrand);
 router.get('/GetAllProducts', GetAllProducts);
 router.get('/getBrand', GetBrand);
 router.get('/getCategories',upload, GetCategories);
+router.get('/FindbyId/:name', FindbyId);
 
 
 
