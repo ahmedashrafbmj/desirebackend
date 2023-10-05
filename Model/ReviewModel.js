@@ -1,7 +1,15 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const reviewSchema = new mongoose.Schema({
   name: {
+    type: String,
+    required: true,
+  },
+  reviewTitle: {
+    type: String,
+    required: true,
+  },
+  reviewComment: {
     type: String,
     required: true,
   },
@@ -13,7 +21,7 @@ const reviewSchema = new mongoose.Schema({
     type: String,
     required: [true, "Number is required"],
   },
-  message: {
+  rating: {
     type: String,
     required: [true, "message is Required"],
   },
@@ -35,9 +43,8 @@ const reviewSchema = new mongoose.Schema({
   //   type: String,
   //   required: [true, "video is Required"],
   // },
-  
 });
 
-const Review = mongoose.model('Reviews', reviewSchema);
+const Review = mongoose.model("Reviews", reviewSchema);
 
 module.exports = Review;
