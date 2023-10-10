@@ -1,6 +1,6 @@
 const Post = require("../Model/ProductSchema");
 const Review = require("../Model/ReviewModel"); // Assuming your schema is in a 'models' directory
-
+const { sendResponse } = require("../helper/helper");
 const reviewController = {};
 
 // Create a new review
@@ -88,32 +88,24 @@ reviewController.updateReviewById = async (req, res) => {
 reviewController.ApproveandRejectReview = async (req, res) => {
   try {
     const reviewId = req.params.reviewId;
-    const action = req.body.action;
-
     const review = await Review.findById(reviewId);
-
     if (!review) {
-      return res.status(404).json({ message: "review not found" });
+      return res
+        .status(404)
+        .send(sendResponse(false, null, "review not found"));
     }
+    review.isApproved = req.body.isApproved; // Assuming you send the boolean value in the request body
+    await review.save();
 
-    if (action === 1) {
-      // Compare action to a number
-      review.isApproved = true;
-      await review.save();
-      return res.json({ message: "review approved successfully" });
-    } else if (action === 0) {
-      // Compare action to a number
-      review.isApproved = false;
-      await review.save();
-      return res.json({ message: "review rejected successfully" });
-    } else {
-      return res.status(400).json({ message: "Invalid action" });
-    }
+    return res.send(
+      sendResponse(true, review, "review status updated successfully")
+    );
   } catch (error) {
-    res.status(500).json({
-      message: "Failed to approve/reject review",
-      error: error.message,
-    });
+    // Handle errors
+    console.error(error);
+    return res
+      .status(500)
+      .send(sendResponse(false, null, "Internal Server Error"));
   }
 };
 
@@ -134,6 +126,23 @@ reviewController.getReviewsByProductId = async (req, res) => {
     res.status(200).json({ status: true, data: approvedReviews });
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+};
+
+// Delete reviews
+reviewController.deleteReview = async (req, res) => {
+  let reviewId = req.params.reviewId;
+  let result = await Review.findById(reviewId);
+
+  if (!result) {
+    res.send(sendResponse(false, null, "Data Not Found")).status(404);
+  } else {
+    let deleResult = await Review.findByIdAndDelete(reviewId);
+    if (!deleResult) {
+      res.send(sendResponse(false, null, "Data Not Deleted")).status(400);
+    } else {
+      res.send(sendResponse(true, deleResult, "Data Deleted")).status(200);
+    }
   }
 };
 

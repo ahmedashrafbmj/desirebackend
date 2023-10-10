@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const postSchema = new mongoose.Schema({
   name: {
@@ -7,17 +7,17 @@ const postSchema = new mongoose.Schema({
   },
   category: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Category',
+      type: String,
+      ref: "Category",
     },
   ],
   brand: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Category',
+      type: String,
+      ref: "Category",
     },
   ],
- 
+
   price: {
     type: String,
     required: [true, "price is required"],
@@ -59,9 +59,8 @@ const postSchema = new mongoose.Schema({
   //   type: String,
   //   required: [true, "video is Required"],
   // },
-  
 });
 
-const Post = mongoose.model('Post', postSchema);
+const Post = mongoose.model("Post", postSchema);
 
 module.exports = Post;

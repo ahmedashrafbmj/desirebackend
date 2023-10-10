@@ -14,6 +14,8 @@ const {
   GetAllApprovedPostAdmin,
   GetAllProducts,
   Findbylink,
+  DeleteProduct,
+  updateProduct,
 } = require("../Conntroller/Product");
 const { placeOrder, approveRejectOrder } = require("../Conntroller/Orders");
 // const {ApprovePost} = require("../Conntroller/Product")
@@ -53,6 +55,7 @@ router.get("/GetAllProducts", GetAllProducts);
 router.get("/getBrand", GetBrand);
 router.get("/getCategories", upload, GetCategories);
 router.get("/FindbyId/:name", FindbyId);
+router.get("/getAllReview/:ProductId", reviewController.getReviewsByProductId);
 
 router.post("/addCategory", upload, AddCategory);
 router.post("/addBrand", upload, AddBrand);
@@ -61,8 +64,17 @@ router.post("/Checkout", verifyUserToken, placeOrder);
 router.post("/approveRejectOrder", verifyAdminToken, approveRejectOrder);
 router.post("/processPayment", verifyUserToken, processPayment);
 router.post("/confirmPayment", verifyUserToken, confirmPayment);
-router.get("/getAllReview/:ProductId", reviewController.getReviewsByProductId);
 
 router.post("/createreview", upload, reviewController.createReview);
+
+router.put(
+  "/updatereview/:reviewId",
+  upload,
+  reviewController.ApproveandRejectReview
+);
+router.put("/updateProduct/:productId", upload, updateProduct);
+
+router.delete("/deleteReview/:reviewId", reviewController.deleteReview);
+router.delete("/deleteProduct/:productId", DeleteProduct);
 
 module.exports = router;
