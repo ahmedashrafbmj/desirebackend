@@ -56,7 +56,7 @@ const placeOrder = async (req, res) => {
         // userId,
         name,
         email,
-        number,
+
         address,
         lastName,
         contact,

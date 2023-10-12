@@ -22,11 +22,7 @@ const orderSchema = new mongoose.Schema({
   email: {
     type: String,
   },
-  number: [
-    {
-      type: String,
-    },
-  ],
+
   address: {
     type: String,
   },
