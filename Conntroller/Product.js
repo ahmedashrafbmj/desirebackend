@@ -246,28 +246,24 @@ const DeleteProduct = async (req, res) => {
 };
 
 const updateProduct = async (req, res) => {
-  let productId = req.params.productId;
-  let result = await Post.findById(productId);
-
   try {
+    const productId = req.params.productId;
+    const { category, brand } = req.body;
+    const result = await Post.findById(productId);
+
     if (!result) {
-      res.send(sendResponse(false, null, "Data Not Found")).status(404);
+      return res.status(404).send(sendResponse(false, null, "Data Not Found"));
     }
 
+    // Handle image updates if there are uploaded files
     if (req.files && req.files.length > 0) {
-      // Assuming you're storing the filenames in an array
       const imageFilenames = req.files.map((file) => file.filename);
-
-      // Add the image filenames to the request body
       req.body.images = imageFilenames;
 
-      // Delete the old images (assuming you have stored their filenames in the 'result' object)
       if (result.images && result.images.length > 0) {
+        // Delete the old images
         result.images.forEach((oldImage) => {
-          // Construct the path to the old image
           const imagePath = path.join("uploads/", oldImage);
-
-          // Delete the old image file
           fs.unlink(imagePath, (err) => {
             if (err) {
               console.error(`Error deleting old image: ${err}`);
@@ -277,18 +273,29 @@ const updateProduct = async (req, res) => {
       }
     }
 
+    // Find category and brand names based on their IDs
+    const foundCategorys = await Category.find({ _id: { $in: category } });
+    const foundBrands = await Brand.find({ _id: { $in: brand } });
+
+    // Extract names from the found categories and brands
+    const cat = foundCategorys.map((e) => e.name);
+    const bran = foundBrands.map((e) => e.name);
+
+    req.body.category = cat;
+    req.body.brand = bran;
+
     const update = await Post.findByIdAndUpdate(productId, req.body, {
       new: true,
     });
 
     if (!update) {
-      res.send(sendResponse(false, null, "Data Not Found")).status(404);
+      return res.status(404).send(sendResponse(false, null, "Data Not Found"));
     } else {
-      res.send(sendResponse(true, update, "Data Update")).status(200);
+      return res.status(200).send(sendResponse(true, update, "Data Update"));
     }
   } catch (e) {
     console.log(e);
-    res.send(sendResponse(false, null, "Internal Error")).status(400);
+    return res.status(400).send(sendResponse(false, null, "Internal Error"));
   }
 };
 

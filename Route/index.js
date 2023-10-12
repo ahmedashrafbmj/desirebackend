@@ -17,7 +17,11 @@ const {
   DeleteProduct,
   updateProduct,
 } = require("../Conntroller/Product");
-const { placeOrder, approveRejectOrder } = require("../Conntroller/Orders");
+const {
+  placeOrder,
+  approveRejectOrder,
+  GetAllOrders,
+} = require("../Conntroller/Orders");
 // const {ApprovePost} = require("../Conntroller/Product")
 // const {GetAllApprovedPost} = require("../Conntroller/Product")
 
@@ -52,6 +56,7 @@ router.get("/product/:Findbylink", Findbylink);
 router.get("/category/:Findbylink", Findbylinkcat);
 router.get("/brand/:Findbylink", Findbylinkbrand);
 router.get("/GetAllProducts", GetAllProducts);
+router.get("/GetAllOrders", GetAllOrders);
 router.get("/getBrand", GetBrand);
 router.get("/getCategories", upload, GetCategories);
 router.get("/FindbyId/:name", FindbyId);
@@ -60,7 +65,7 @@ router.get("/getAllReview/:ProductId", reviewController.getReviewsByProductId);
 router.post("/addCategory", upload, AddCategory);
 router.post("/addBrand", upload, AddBrand);
 // router.get('/GetAllApprovedPost', GetAllApprovedPost);
-router.post("/Checkout", verifyUserToken, placeOrder);
+router.post("/Checkout", upload, placeOrder);
 router.post("/approveRejectOrder", verifyAdminToken, approveRejectOrder);
 router.post("/processPayment", verifyUserToken, processPayment);
 router.post("/confirmPayment", verifyUserToken, confirmPayment);
