@@ -3,16 +3,8 @@ const Order = require("../Model/OrderSchema");
 
 const placeOrder = async (req, res) => {
   try {
-    const {
-      products,
-      name,
-      email,
-      number,
-      address,
-      totalprice,
-      lastName,
-      contact,
-    } = req.body;
+    const { products, name, email, address, totalprice, lastName, contact } =
+      req.body;
     // const { userId } = req.user; // Assuming you have authenticated the user
 
     // Find the products by their IDs

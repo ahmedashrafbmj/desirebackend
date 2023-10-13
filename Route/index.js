@@ -41,7 +41,12 @@ const {
   GetCategories,
   Findbylinkcat,
 } = require("../Conntroller/Category");
-const { AddBrand, GetBrand, Findbylinkbrand } = require("../Conntroller/Brand");
+const {
+  AddBrand,
+  GetBrand,
+  Findbylinkbrand,
+  updateBrand,
+} = require("../Conntroller/Brand");
 const reviewController = require("../Conntroller/Review");
 // Signup route
 // router.post('/signup', upload.none(),signup);
@@ -78,6 +83,7 @@ router.put(
   reviewController.ApproveandRejectReview
 );
 router.put("/updateProduct/:productId", upload, updateProduct);
+router.put("/updateBrand/:brandId", upload, updateBrand);
 
 router.delete("/deleteReview/:reviewId", reviewController.deleteReview);
 router.delete("/deleteProduct/:productId", DeleteProduct);

@@ -1,14 +1,14 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const brandSchema = new mongoose.Schema({
-    name: {
-      type: String,
-      required: [true, "name is Required"],
-    },
-    link: {
-      type: String,
-      required: [true, "link is Required"],
-    },
+  name: {
+    type: String,
+    required: [true, "name is Required"],
+  },
+  link: {
+    type: String,
+    required: [true, "link is Required"],
+  },
 
   images: [
     {
@@ -16,8 +16,14 @@ const brandSchema = new mongoose.Schema({
       required: [true, "images are Required"],
     },
   ],
+  categories: [
+    {
+      type: String,
+      required: [true, "images are Required"],
+    },
+  ],
 });
 
-const Brand = mongoose.model('brand', brandSchema);
+const Brand = mongoose.model("brand", brandSchema);
 
 module.exports = Brand;
