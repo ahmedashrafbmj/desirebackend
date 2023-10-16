@@ -96,7 +96,7 @@ const updateBrand = async (req, res) => {
       }
     }
 
-    // Find category and brand names based on their IDs
+    // Find category  names based on their IDs
     const foundCategorys = await Category.find({ _id: { $in: categories } });
 
     // Extract names from the found categories and brands
@@ -118,10 +118,26 @@ const updateBrand = async (req, res) => {
     return res.status(400).send(sendResponse(false, null, "Internal Error"));
   }
 };
+const deleteBrand = async (req, res) => {
+  let brandId = req.params.brandId;
+  let result = await Brand.findById(brandId);
+
+  if (!result) {
+    res.send(sendResponse(false, null, "Data Not Found")).status(404);
+  } else {
+    let deleResult = await Brand.findByIdAndDelete(brandId);
+    if (!deleResult) {
+      res.send(sendResponse(false, null, "Data Not Deleted")).status(400);
+    } else {
+      res.send(sendResponse(true, deleResult, "Data Deleted")).status(200);
+    }
+  }
+};
 
 module.exports = {
   AddBrand,
   GetBrand,
   Findbylinkbrand,
   updateBrand,
+  deleteBrand,
 };

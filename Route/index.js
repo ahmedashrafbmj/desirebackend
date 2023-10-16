@@ -46,6 +46,7 @@ const {
   GetBrand,
   Findbylinkbrand,
   updateBrand,
+  deleteBrand,
 } = require("../Conntroller/Brand");
 const reviewController = require("../Conntroller/Review");
 // Signup route
@@ -87,5 +88,6 @@ router.put("/updateBrand/:brandId", upload, updateBrand);
 
 router.delete("/deleteReview/:reviewId", reviewController.deleteReview);
 router.delete("/deleteProduct/:productId", DeleteProduct);
+router.delete("/deleteBrand/:brandId", deleteBrand);
 
 module.exports = router;
