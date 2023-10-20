@@ -49,7 +49,12 @@ const {
   deleteBrand,
 } = require("../Conntroller/Brand");
 const reviewController = require("../Conntroller/Review");
-const { AddsubCategory } = require("../Conntroller/SubCategory");
+const {
+  AddsubCategory,
+  GetsubCategories,
+  updatesubCategories,
+  deletesubCategories,
+} = require("../Conntroller/SubCategory");
 // Signup route
 // router.post('/signup', upload.none(),signup);
 router.post("/signup", signup);
@@ -66,6 +71,7 @@ router.get("/GetAllProducts", GetAllProducts);
 router.get("/GetAllOrders", GetAllOrders);
 router.get("/getBrand", GetBrand);
 router.get("/getCategories", upload, GetCategories);
+router.get("/getsubCategories", upload, GetsubCategories);
 router.get("/FindbyId/:name", FindbyId);
 router.get("/getAllReview/:ProductId", reviewController.getReviewsByProductId);
 
@@ -88,9 +94,15 @@ router.put(
 );
 router.put("/updateProduct/:productId", upload, updateProduct);
 router.put("/updateBrand/:brandId", upload, updateBrand);
+router.put(
+  "/updatesubCategories/:subCategoriesId",
+  upload,
+  updatesubCategories
+);
 
 router.delete("/deleteReview/:reviewId", reviewController.deleteReview);
 router.delete("/deleteProduct/:productId", DeleteProduct);
 router.delete("/deleteBrand/:brandId", deleteBrand);
+router.delete("/deletesubCategories/:subCategoriesId", deletesubCategories);
 
 module.exports = router;

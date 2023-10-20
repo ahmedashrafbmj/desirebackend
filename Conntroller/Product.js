@@ -6,6 +6,7 @@ const fs = require("fs"); // Import the fs module for file system operations
 
 const { sendResponse } = require("../helper/helper");
 const path = require("path");
+const subCategory = require("../Model/SubCategorySchema");
 
 // Generate a random number between min and max (inclusive)
 function getRandomNumber(min, max) {
@@ -22,6 +23,7 @@ const AddProduct = async (req, res) => {
       name,
       category,
       brand,
+      // subcategories,
       price,
       discountedPrice,
       menuProductNumber,
@@ -35,13 +37,17 @@ const AddProduct = async (req, res) => {
     console.log(req, "req.files");
 
     const categoryIds = category.map((product) => product);
+    const subcategoriesIds = subcategories.map((product) => product);
     // console.log(categoryIds,"categoryIds")
     const foundcategorys = await Category.find({ _id: categoryIds });
+    // const foundsubcategories = await subCategory.find({
+    //   _id: subcategoriesIds,
+    // });
     // console.log(foundcategorys,"foundcategorys")
     // Use the $in operator to find documents with these IDs
     // const foundcategorys= Category.find({ _id: { $in: categoryIds } })
-    //     .then((foundCategories) => {
-    //       console.log(foundCategories, "foundCategories");
+    //     .then((foundsubcategories) => {
+    //       console.log(foundsubcategories, "foundsubcategories");
     //     })
     //     .catch((error) => {
     //       console.error(error);
@@ -54,9 +60,11 @@ const AddProduct = async (req, res) => {
       foundcategorys.map((e, i) => e.name),
       "foundcategorys"
     );
-    const cat = foundcategorys.map((e, i) => e);
-    const bran = foundbrands.map((e, i) => e);
-    console.log(foundbrands, "foundbrands");
+    const cat = foundcategorys.map((e, i) => e.name);
+    const bran = foundbrands.map((e, i) => e.name);
+    // const subcategoriesss = foundsubcategories.map((e, i) => e.categories);
+
+    // console.log(subcategoriesss, "subcategoriesss");
 
     const imageFileNames = req.files.map((file) => file.filename);
 
@@ -64,6 +72,7 @@ const AddProduct = async (req, res) => {
       name,
       category: cat,
       brand: bran,
+      // subcategories: subcategoriesss,
       price,
       ProductLink,
       discountedPrice,

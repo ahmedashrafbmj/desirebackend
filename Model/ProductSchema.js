@@ -11,6 +11,12 @@ const postSchema = new mongoose.Schema({
       ref: "Category",
     },
   ],
+  // subcategories: [
+  //   {
+  //     type: String,
+  //     ref: "Category",
+  //   },
+  // ],
   brand: [
     {
       type: String,
