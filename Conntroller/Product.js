@@ -54,8 +54,8 @@ const AddProduct = async (req, res) => {
       foundcategorys.map((e, i) => e.name),
       "foundcategorys"
     );
-    const cat = foundcategorys.map((e, i) => e.name);
-    const bran = foundbrands.map((e, i) => e.name);
+    const cat = foundcategorys.map((e, i) => e);
+    const bran = foundbrands.map((e, i) => e);
     console.log(foundbrands, "foundbrands");
 
     const imageFileNames = req.files.map((file) => file.filename);
@@ -278,8 +278,8 @@ const updateProduct = async (req, res) => {
     const foundBrands = await Brand.find({ _id: { $in: brand } });
 
     // Extract names from the found categories and brands
-    const cat = foundCategorys.map((e) => e.name);
-    const bran = foundBrands.map((e) => e.name);
+    const cat = foundCategorys.map((e) => e);
+    const bran = foundBrands.map((e) => e);
 
     req.body.category = cat;
     req.body.brand = bran;

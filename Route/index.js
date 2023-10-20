@@ -49,6 +49,7 @@ const {
   deleteBrand,
 } = require("../Conntroller/Brand");
 const reviewController = require("../Conntroller/Review");
+const { AddsubCategory } = require("../Conntroller/SubCategory");
 // Signup route
 // router.post('/signup', upload.none(),signup);
 router.post("/signup", signup);
@@ -75,6 +76,8 @@ router.post("/Checkout", upload, placeOrder);
 router.post("/approveRejectOrder", verifyAdminToken, approveRejectOrder);
 router.post("/processPayment", verifyUserToken, processPayment);
 router.post("/confirmPayment", verifyUserToken, confirmPayment);
+// router.post("/addsubCategory", verifyUserToken, confirmPayment);
+router.post("/addsubCategory", upload, AddsubCategory);
 
 router.post("/createreview", upload, reviewController.createReview);
 

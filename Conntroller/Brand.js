@@ -20,7 +20,7 @@ const AddBrand = async (req, res) => {
       const post = new Brand({
         name,
         link,
-        categories: existedcategories.map((category) => category.name),
+        categories: existedcategories.map((category) => category),
         images: req.files.map((file) => file.filename),
       });
 
