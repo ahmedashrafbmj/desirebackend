@@ -7,22 +7,23 @@ const postSchema = new mongoose.Schema({
   },
   category: [
     {
-      type: String,
+      type: Object,
       ref: "Category",
     },
   ],
+
+  brand: [
+    {
+      type: Object,
+      ref: "Brand",
+    },
+  ],
+
   // subcategories: [
   //   {
   //     type: String,
-  //     ref: "Category",
   //   },
   // ],
-  brand: [
-    {
-      type: String,
-      ref: "Category",
-    },
-  ],
 
   price: {
     type: String,

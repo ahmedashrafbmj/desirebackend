@@ -18,7 +18,7 @@ const brandSchema = new mongoose.Schema({
   ],
   categories: [
     {
-      type: String,
+      type: Object,
       required: [true, "categories are Required"],
     },
   ],

@@ -6,8 +6,7 @@ const fs = require("fs"); // Import the fs module for file system operations
 
 const { sendResponse } = require("../helper/helper");
 const path = require("path");
-const subCategory = require("../Model/SubCategorySchema");
-
+const SubcategorySchema = require("../Model/SubCategorySchema");
 // Generate a random number between min and max (inclusive)
 function getRandomNumber(min, max) {
   const randomDecimal = Math.random();
@@ -18,12 +17,10 @@ function getRandomNumber(min, max) {
 // Subadmin add post route
 const AddProduct = async (req, res) => {
   try {
-    // const imageFileNames = req.files.map((file) => file.filename);
     const {
       name,
       category,
       brand,
-      // subcategories,
       price,
       discountedPrice,
       menuProductNumber,
@@ -34,33 +31,35 @@ const AddProduct = async (req, res) => {
     } = req.body;
 
     const singleProductUnit = getRandomNumber(1, 12);
-    console.log(req, "req.files");
 
-    const categoryIds = category.map((product) => product);
-    // const subcategoriesIds = subcategories.map((product) => product);
-    // console.log(categoryIds,"categoryIds")
-    const foundcategorys = await Category.find({ _id: categoryIds });
+    const categoryIds = category?.map((product) => product);
 
-    const brandIds = brand.map((product) => product);
-    // console.log(brandIds,"brandIds")
-    const foundbrands = await Brand.find({ _id: brandIds });
-    console.log(
-      foundcategorys.map((e, i) => e.name),
-      "foundcategorys"
-    );
-    const cat = foundcategorys.map((e, i) => e);
-    const bran = foundbrands.map((e, i) => e);
-    // const subcategoriesss = foundsubcategories.map((e, i) => e.categories);
+    // Find items in both the Category and Subcategory collections
+    const [foundCategories, foundSubcategories] = await Promise.all([
+      Category.find({ _id: { $in: categoryIds } }),
+      SubcategorySchema.find({ _id: { $in: categoryIds } }),
+    ]);
 
-    // console.log(subcategoriesss, "subcategoriesss");
+    const foundItems = [...foundCategories, ...foundSubcategories];
+    console.log(foundItems, "foundItems");
 
-    const imageFileNames = req.files.map((file) => file.filename);
+    // Separate foundCategories and foundSubcategories if needed
+    const cat = foundCategories.map((e) => e);
+    const sub = foundSubcategories.map((e) => e);
+
+    const brandIds = brand?.map((product) => product);
+
+    const foundBrands = await Brand.find({ _id: brandIds });
+
+    const bran = foundBrands.map((e) => e);
+
+    const imageFileNames = req.files?.map((file) => file?.filename);
 
     const post = new Post({
       name,
-      category: cat,
       brand: bran,
-      // subcategories: subcategoriesss,
+      category: foundItems,
+      subcategories: sub,
       price,
       ProductLink,
       discountedPrice,
@@ -72,19 +71,11 @@ const AddProduct = async (req, res) => {
       shortDescription,
     });
 
-    // await post.save();
-
-    console.log(post, "post");
-
     await post.save();
-
-    // console.log(title);
-    console.log(post, "post");
 
     res
       .status(201)
-      .json({ status: true, message: "Post added successfully ", data: post });
-    // });
+      .json({ status: true, message: "Post added successfully", data: post });
   } catch (error) {
     console.log(req.files, "req.user");
     res
@@ -296,6 +287,42 @@ const updateProduct = async (req, res) => {
   }
 };
 
+function filterDataByCategory(data, categoryName) {
+  const filteredData = [];
+
+  for (const array of data) {
+    for (const jsonString of array) {
+      const obj = JSON.parse(jsonString);
+      if (obj.categories && obj.categories.includes(categoryName)) {
+        filteredData.push(obj);
+      }
+    }
+  }
+
+  return filteredData;
+}
+const findPostsByCategory = async (req, res) => {
+  const categoryName = req.params.name; // Assuming you pass the category name as a URL parameter
+
+  try {
+    // Assuming that Post.find({}) returns an array of objects
+    const posts = await Post.find({}); // Query all posts
+
+    // Filter posts that have the specified category name
+    const filteredData = posts.filter((post) =>
+      post.category.some((category) => category.name === categoryName)
+    );
+
+    res.json({ data: filteredData }); // Respond with the filtered posts
+  } catch (error) {
+    res.status(500).json({
+      status: false,
+      message: "Failed to retrieve posts",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   AddProduct,
   DeleteProduct,
@@ -306,4 +333,5 @@ module.exports = {
   Findbylink,
   FindbyId,
   updateProduct,
+  findPostsByCategory,
 };

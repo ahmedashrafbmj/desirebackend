@@ -16,6 +16,7 @@ const {
   Findbylink,
   DeleteProduct,
   updateProduct,
+  findPostsByCategory,
 } = require("../Conntroller/Product");
 const {
   placeOrder,
@@ -40,6 +41,7 @@ const {
   AddCategory,
   GetCategories,
   Findbylinkcat,
+  updateCategories,
 } = require("../Conntroller/Category");
 const {
   AddBrand,
@@ -73,6 +75,7 @@ router.get("/getBrand", GetBrand);
 router.get("/getCategories", upload, GetCategories);
 router.get("/getsubCategories", upload, GetsubCategories);
 router.get("/FindbyId/:name", FindbyId);
+router.get("/findPostsByCategory/:name", upload, findPostsByCategory);
 router.get("/getAllReview/:ProductId", reviewController.getReviewsByProductId);
 
 router.post("/addCategory", upload, AddCategory);
@@ -99,6 +102,7 @@ router.put(
   upload,
   updatesubCategories
 );
+router.put("/updateCategory/:CategoriesId", upload, updateCategories);
 
 router.delete("/deleteReview/:reviewId", reviewController.deleteReview);
 router.delete("/deleteProduct/:productId", DeleteProduct);
