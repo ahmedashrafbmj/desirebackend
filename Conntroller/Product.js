@@ -59,7 +59,7 @@ const AddProduct = async (req, res) => {
       name,
       brand: bran,
       category: foundItems,
-      subcategories: sub,
+      // subcategories: sub,
       price,
       ProductLink,
       discountedPrice,
@@ -120,7 +120,7 @@ const FindbyId = async (req, res) => {
       return;
     }
 
-    const baseUrl = "http://backend.terakarachi.com/uploads/"; // Replace with your actual base URL
+    const baseUrl = "http://localhost:3000/uploads/"; // Replace with your actual base URL
     const imagesWithBaseUrl = result.images.map((image) => baseUrl + image);
 
     // Update the result with the new image URLs
@@ -190,7 +190,7 @@ const GetAllProducts = async (req, res) => {
 
     const posts = await Post.find();
 
-    const baseUrl = "http://backend.terakarachi.com/uploads/"; // Replace with your actual base URL
+    const baseUrl = "http://localhost:3000/uploads/"; // Replace with your actual base URL
     const postsWithBaseUrl = posts.map((data) => {
       data.images = data.images.map((image) => baseUrl + image);
       return data;
@@ -323,6 +323,28 @@ const findPostsByCategory = async (req, res) => {
   }
 };
 
+const fndPostsByCategory = async (req, res) => {
+  let name = req.params.name;
+  try {
+    if (name) {
+      // Convert the name parameter to lowercase for case-insensitive search
+      name = name.toLowerCase();
+
+      const result = await Category.find({
+        name: { $regex: new RegExp("^" + name, "i") }, // 'i' flag for case-insensitive search
+      });
+
+      if (!result || result.length === 0) {
+        res.status(400).send(sendResponse(false, null, "Data Not Found"));
+      } else {
+        res.status(200).send(sendResponse(true, result));
+      }
+    }
+  } catch (e) {
+    console.log(e);
+    res.status(500).send(sendResponse(false, null, "Internal error"));
+  }
+};
 module.exports = {
   AddProduct,
   DeleteProduct,
@@ -334,4 +356,5 @@ module.exports = {
   FindbyId,
   updateProduct,
   findPostsByCategory,
+  fndPostsByCategory
 };

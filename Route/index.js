@@ -17,6 +17,7 @@ const {
   DeleteProduct,
   updateProduct,
   findPostsByCategory,
+  fndPostsByCategory,
 } = require("../Conntroller/Product");
 const {
   placeOrder,
@@ -70,6 +71,7 @@ router.get("/product/:Findbylink", Findbylink);
 router.get("/category/:Findbylink", Findbylinkcat);
 router.get("/brand/:Findbylink", Findbylinkbrand);
 router.get("/GetAllProducts", GetAllProducts);
+router.get("/findPostsByCategory/:name", upload, fndPostsByCategory);
 router.get("/GetAllOrders", GetAllOrders);
 router.get("/getBrand", GetBrand);
 router.get("/getCategories", upload, GetCategories);

@@ -46,7 +46,7 @@ const postSchema = new mongoose.Schema({
   },
   longDescription: {
     type: String,
-    required: [true, "longDescription is Required"],
+    // required: [f, "longDescription is Required"],
   },
   shortDescription: {
     type: String,
